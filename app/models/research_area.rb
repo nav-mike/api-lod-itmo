@@ -28,6 +28,7 @@ class ResearchArea < ActiveLod::Base
     query.each_solution do |solution|
       result << to_research_area(solution)
     end
+    result
   end
   
   def self.to_research_area(solution)

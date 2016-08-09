@@ -8,7 +8,7 @@ class LaboratoriesController < ApplicationController
 
   def show
     respond_to do |format|
-      format.html { redirect_to 'http://rus-lod.herokuapp/com/apis' }
+      format.html { redirect_to 'http://rus-lod.herokuapp.com/apis' }
       format.json { @laboratory = Laboratory.find params[:id] }
     end
   end

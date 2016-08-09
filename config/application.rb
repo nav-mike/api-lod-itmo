@@ -25,9 +25,9 @@ module Workspace
     
     config.generators do |g|
       g.orm :active_record
-      g.template_engine :slim
+      g.template_engine :jbuilder
       g.test_framework false
-      g.jbuilder false
+      g.jbuilder true
       g.assets false
       g.helper false
     end

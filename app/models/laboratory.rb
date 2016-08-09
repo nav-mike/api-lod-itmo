@@ -1,4 +1,4 @@
-class Laboratory
+class Laboratory < ActiveLod::Base
   attr_reader :en_name, :ru_name, :web_page, :country, :uri
 
   def initialize(options = {})

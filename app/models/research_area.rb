@@ -36,5 +36,6 @@ class ResearchArea < ActiveLod::Base
       id: solution[:id].value,
       name: solution[:name].value
     }
+    ResearchArea.new rec
   end
 end

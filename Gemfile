@@ -3,8 +3,11 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.5'
-# gem 'sqlite3'
-gem 'pg' # for heroku
+group :development, :test do
+  gem 'sqlite3'
+end
+
+gem 'pg', group: :production # for heroku
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets

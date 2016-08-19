@@ -8,4 +8,5 @@ class Application < ActiveRecord::Base
 
   validates :key, uniqueness: true
   validates :key, length: {in: 10..20}
+  validates :key, format: {with: /\A[a-zA-Z0-9]+\z/}
 end

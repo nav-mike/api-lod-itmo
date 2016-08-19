@@ -1,7 +1,7 @@
 class PeopleController < ApplicationController
   def index
     respond_to do |format|
-      format.html { redirect_to 'http::/rus-lod.herokuapp.com/apis' }
+      format.html { redirect_to 'http://rus-lod.herokuapp.com/apis' }
       format.json { @people = Person.all }
     end
   end

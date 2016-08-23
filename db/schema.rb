@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160819062138) do
+ActiveRecord::Schema.define(version: 20160823211250) do
 
   create_table "applications", force: :cascade do |t|
     t.string   "name",        limit: 32,  null: false
@@ -24,5 +24,14 @@ ActiveRecord::Schema.define(version: 20160819062138) do
 
   add_index "applications", ["key"], name: "index_applications_on_key", unique: true
   add_index "applications", ["name"], name: "index_applications_on_name", unique: true
+
+  create_table "courses", force: :cascade do |t|
+    t.string   "name",        limit: 100, null: false
+    t.string   "description", limit: 200
+    t.string   "link",        limit: 100
+    t.string   "teacher",     limit: 100, null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
 
 end

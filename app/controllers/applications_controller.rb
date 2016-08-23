@@ -49,6 +49,15 @@ class ApplicationsController < ApplicationController
   end
 
   def destroy
+    respond_to do |format|
+      format.html { redirect_to 'https"//rus-lod.herokuapp.com/apis' }
+      format.json do
+        @application.destroy
+        render json: {ok: true}, status: :ok
+      end
+    end
+  rescue => e
+    render json: {message: e.message}, status: :internal_server_error
   end
   
   private

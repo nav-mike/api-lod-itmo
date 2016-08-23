@@ -1,4 +1,5 @@
 class ApplicationsController < ApplicationController
+  protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }
   before_action :set_application, only: %i(show update destroy)
 
   def index
@@ -32,6 +33,16 @@ class ApplicationsController < ApplicationController
   end
 
   def create
+    respond_to do |format|
+      format.html { redirect_to 'https://rus-lod.herokuapp.com/apis' }
+      format.json do
+        @application = Application.new application_params
+        @application.save!
+        render json: {ok: true}, status: :ok
+      end
+    end
+  rescue => e
+    render json: {message: e.message}, status: :internal_server_error
   end
 
   def update
@@ -41,7 +52,11 @@ class ApplicationsController < ApplicationController
   end
   
   private
-  
+
+  def  application_params
+    params.require(:application).permit(:name, :description, :link, :key)
+  end
+
   def set_application
     if params[:id].present?
       @application = Application.find params[:id]

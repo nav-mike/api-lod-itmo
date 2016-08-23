@@ -34,20 +34,24 @@ class Person < ActiveLod::Base
     end
     result
   end
-  
+
+  def name
+    "#{@last_name} #{@first_name} #{@middle_name}"
+  end
+
   def self.find(id)
     query = sparql.select(:id, :academic_qualification, :academic_status, :affiliated_organization,
                           :first_name, :last_name, :middle_name, :pcard_id)
       .where(
         [:id, RDF::URI('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), RDF::URI('http://xmlns.com/foaf/0.1/Person')],
-        [:id, RDF::URI('http://vivoplus.aksw.org/ontology#academicQualification'), :academic_qualification],
-        [:id, RDF::URI('http://vivoplus.aksw.org/ontology#academicStatus'), :academic_status],
-        [:id, RDF::URI('http://vivoweb.org/ontology/core#affiliatedOrganization'), :affiliated_organization],
-        [:id, RDF::URI('http://xmlns.com/foaf/0.1/firstName'), :first_name],
-        [:id, RDF::URI('http://xmlns.com/foaf/0.1/lastName'), :last_name],
-        [:id, RDF::URI('http://vivoweb.org/ontology/core#middleName'), :middle_name],
-        [:id, RDF::URI('http://vivoplus.aksw.org/ontology#pcardId'), :pcard_id]
       )
+      .optional([:id, RDF::URI('http://vivoplus.aksw.org/ontology#academicQualification'), :academic_qualification])
+      .optional([:id, RDF::URI('http://vivoweb.org/ontology/core#affiliatedOrganization'), :affiliated_organization])
+      .optional([:id, RDF::URI('http://xmlns.com/foaf/0.1/firstName'), :first_name])
+      .optional([:id, RDF::URI('http://xmlns.com/foaf/0.1/lastName'), :last_name])
+      .optional([:id, RDF::URI('http://vivoweb.org/ontology/core#middleName'), :middle_name])
+      .optional([:id, RDF::URI('http://vivoplus.aksw.org/ontology#pcardId'), :pcard_id])
+      .optional([:id, RDF::URI('http://vivoplus.aksw.org/ontology#academicStatus'), :academic_status])
       .filter("STR(?pcard_id) = \"#{id}\"")
       
       to_person query.solutions.first

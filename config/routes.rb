@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :laboratories, only: %i(index show)
   resources :people, only: %i(index show)
   resources :applications, only: %i(index show create update destroy), constraints: {id: /[0-9]+/}
+  resources :courses, only: %i(index show)
   get '/applications/key' => 'applications#key'
 
   # applications with key

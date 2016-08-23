@@ -5,5 +5,5 @@ class Course < ActiveRecord::Base
 
   validates :link, length: {in: 0..100}
 
-  validates :teacher, length: {in: 100}
+  validates :teacher, length: {in: 2..100}
 end

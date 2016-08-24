@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 'news/index'
+
+  get 'news/show'
+
   resources :research_areas, only: %i(index show)
   resources :laboratories, only: %i(index show)
   resources :people, only: %i(index show)

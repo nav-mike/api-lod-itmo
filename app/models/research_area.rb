@@ -17,6 +17,26 @@ class ResearchArea < ActiveLod::Base
     to_research_area query.solutions.first
   end
   
+  def self.find_uri(uri)
+    query = sparql.select(:id, :name)
+      .where(
+        [:id, RDF::URI('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), RDF::URI('http://vivoplus.aksw.org/ontology#ResearchArea')],
+        [:id, RDF::URI('http://www.w3.org/2000/01/rdf-schema#label'), :name]
+      )
+      .filter("regex(str(?id), \"#{uri}\")")
+      
+    to_research_area query.solutions.first
+  end
+  
+  def self.where_uri(uri_arr)
+    result = []
+    uri_arr.each do |uri|
+      item = find_uri(uri)
+      result << item
+    end
+    result
+  end
+  
   def self.all
     query = sparql.select(:id, :name).distinct
       .where(

@@ -12,4 +12,9 @@ class ResearchAreasController < ApplicationController
       format.json { @research_area = ResearchArea.find params[:id] }
     end
   end
+  
+  def find_by_uri
+    @research_areas = ResearchArea.where_uri(params[:uri])
+    render :index
+  end
 end

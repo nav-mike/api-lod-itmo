@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # find by uri
+  get '/research_areas/find_by_uri' => 'research_areas#find_by_uri', format: /json/
+
   resources :research_areas, only: %i(index show)
   resources :laboratories, only: %i(index show)
   resources :people, only: %i(index show)

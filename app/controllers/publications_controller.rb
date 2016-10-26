@@ -25,7 +25,7 @@ class PublicationsController < ApplicationController
             link: false
           }
         ]
-        @publications = [] unless project_id.to_i == 1
+        @publications = [] unless params[:project_id].to_i == 1
       end
     end
   rescue => e

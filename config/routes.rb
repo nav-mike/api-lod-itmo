@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   resources :courses, only: %i(index show)
   resources :news, only: %i(index show)
   get '/applications/key' => 'applications#key'
+  
+  get '/publications/projects/:project_id' => 'publications#projects', constraints: {id: /[0-9]+/}, format: /json/
 
   # applications with key
   resources :applications, param: :key, only: %i(show update destroy), constraints: {key: /[a-zA-Z0-9]+/}

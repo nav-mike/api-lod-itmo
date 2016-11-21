@@ -9,7 +9,7 @@ class ResearchAreasController < ApplicationController
   def show
     respond_to do |format|
       format.html { redirect_to 'http://rus-lod.herokuapp.com/apis' }
-      format.json { @research_area = ResearchArea.find params[:id] }
+      format.json { @research_area = ResearchArea.find params[:id]; @research_area.include_laboratory! }
     end
   end
   

@@ -9,7 +9,7 @@ class PeopleController < ApplicationController
   def show
     respond_to do |format|
       format.html { redirect_to 'http://rus-lod.herokuapp.com/apis' }
-      format.json { @person = Person.find params[:id] }
+      format.json { @person = Person.find params[:id]; @person.include_laboratory! }
     end
   end
   

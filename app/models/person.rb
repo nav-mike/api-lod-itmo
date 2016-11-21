@@ -1,6 +1,6 @@
 class Person < ActiveLod::Base
   attr_reader :id, :academic_qualification, :academic_status, :affiliated_organization,
-              :first_name, :last_name, :middle_name, :pcard_id
+              :first_name, :last_name, :middle_name, :pcard_id, :laboratory_name
   
   def initialize(options = {})
     @id = options[:id] || ''
@@ -11,6 +11,7 @@ class Person < ActiveLod::Base
     @last_name = options[:last_name] || ''
     @middle_name = options[:middle_name] || ''
     @pcard_id = options[:pcard_id] || ''
+    @laboratory_name = ''
   end
   
   def self.find_by_laboratory(id)
@@ -34,6 +35,11 @@ class Person < ActiveLod::Base
     end
     result
   end
+  
+  def include_laboratory!
+    lab_id = affiliated_organization.gsub(/\Ahttp:\/\/lod.ifmo.ru\/[a-zA-Z]+/, '').to_i
+    @laboratory_name = Laboratory.find(lab_id).ru_name
+  end
 
   def name
     "#{@last_name} #{@first_name} #{@middle_name}"
@@ -53,7 +59,6 @@ class Person < ActiveLod::Base
       .optional([:id, RDF::URI('http://vivoplus.aksw.org/ontology#pcardId'), :pcard_id])
       .optional([:id, RDF::URI('http://vivoplus.aksw.org/ontology#academicStatus'), :academic_status])
       .filter("STR(?pcard_id) = \"#{id}\"")
-      
       to_person query.solutions.first
   end
   

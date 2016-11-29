@@ -1,5 +1,6 @@
 class Laboratory < ActiveLod::Base
-  attr_reader :en_name, :ru_name, :web_page, :country, :id
+  attr_reader :en_name, :ru_name, :web_page, :country, :id,
+              :type
 
   def initialize(options = {})
     @en_name = options[:en_name] || ''
@@ -7,6 +8,7 @@ class Laboratory < ActiveLod::Base
     @web_page = options[:web_page] || ''
     @country = options[:country] || ''
     @id = options[:id] || ''
+    @type = options[:type] || ''
   end
   
   def self.find(pcard_id)
@@ -19,12 +21,13 @@ class Laboratory < ActiveLod::Base
                [:id, RDF::URI('http://www.w3.org/2000/01/rdf-schema#seeAlso'), :web_page],
                [:id, RDF::URI('http://vivoplus.aksw.org/ontology#locatedIn'), :country]
              )
+      .optional([:id, RDF::URI('https://www.w3.org/1999/02/22-rdf-syntax-ns#type'), :academic_status])
       .filter('lang(?en_name) = "en"')
       .filter('lang(?ru_name) = "ru"')
       .filter("regex(str(?id), \"http://lod.ifmo.ru/Laboratory#{pcard_id}\")")
       .distinct
-      
-      to_laboratory(query.solutions.first)
+
+      to_laboratory(query.solutions.first, query.solutions.map { |item| item[:country].value })
   end
   
   def self.all
@@ -44,13 +47,15 @@ class Laboratory < ActiveLod::Base
     result
   end
   
-  def self.to_laboratory(solution)
+  def self.to_laboratory(solution, countries = [])
     rec = {
         id: solution[:id].value,
         en_name: solution[:en_name].value,
         ru_name: solution[:ru_name].value,
         web_page: solution[:web_page].value
       }
+      rec[:type] = solution[:type].value if solution[:type].present?
+      rec[:country] = countries
       Laboratory.new(rec)
   end
 end

@@ -1,6 +1,6 @@
 class Laboratory < ActiveLod::Base
   attr_reader :en_name, :ru_name, :web_page, :country, :id,
-              :type, :areas
+              :type, :areas, :people
 
   def initialize(options = {})
     @en_name = options[:en_name] || ''
@@ -10,10 +10,11 @@ class Laboratory < ActiveLod::Base
     @id = options[:id] || ''
     @type = options[:type] || ''
     @areas = options[:areas] || ''
+    @people = options[:people] || ''
   end
   
   def self.find(pcard_id)
-    query = sparql.select(:id, :en_name, :ru_name, :web_page, :country, :type, :area, :area_name)
+    query = sparql.select(:id, :en_name, :ru_name, :web_page, :country, :type, :area, :area_name, :person, :person_name)
       .where(
                [:id, RDF::URI('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), RDF::URI('http://vivoplus.aksw.org/ontology#Laboratory')],
                [:id, RDF::URI('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), RDF::URI('http://vivoweb.org/ontology/core#Laboratory')],
@@ -25,6 +26,8 @@ class Laboratory < ActiveLod::Base
       .optional([:id, RDF::URI('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), :type])
       .optional([:id, RDF::URI('http://vivoplus.aksw.org/ontology#hasResearchArea'), :area])
       .optional([:area, RDF::URI('http://www.w3.org/2000/01/rdf-schema#label'), :area_name])
+      .optional([:person, RDF::URI('http://vivoweb.org/ontology/core#affiliatedOrganization'), :id])
+      .optional([:person, RDF::URI('http://www.w3.org/2000/01/rdf-schema#label'), :person_name])
       .filter('lang(?en_name) = "en"')
       .filter('lang(?ru_name) = "ru"')
       .filter("regex(str(?id), \"http://lod.ifmo.ru/Laboratory#{pcard_id}\")")
@@ -33,7 +36,8 @@ class Laboratory < ActiveLod::Base
       data = {
         country: query.solutions.map { |item| item[:country].value },
         type: query.solutions.map { |item| item[:type].value }.uniq,
-        areas: query.solutions.map { |item| {name: item[:area_name].value, uri: item[:area].value }}.uniq
+        areas: query.solutions.map { |item| {name: item[:area_name].value, uri: item[:area].value }}.uniq,
+        people: query.solutions.map { |item| {name: item[:person_name].value, uri: item[:person].value }}.uniq
       }
       to_laboratory(query.solutions.first, data)
   end
@@ -66,6 +70,7 @@ class Laboratory < ActiveLod::Base
       rec[:country] = data[:country].uniq if data[:country].present?
       rec[:type] = data[:type] if data[:type].present?
       rec[:areas] = data[:areas] if data[:areas].present?
+      rec[:people] = data[:people] if data[:people].present?
       Laboratory.new(rec)
   end
 end

@@ -1,1 +1,1 @@
-json.extract! @laboratory, :id, :en_name, :ru_name, :web_page, :country, :type, :areas
+json.extract! @laboratory, :id, :en_name, :ru_name, :web_page, :country, :type, :areas, :people

@@ -64,7 +64,7 @@ class ResearchArea < ActiveLod::Base
     rec = {
       id: solution[:id].value,
       name: solution[:name].value,
-      has_research_area: solution[:has_research_area].value
+      has_research_area: hsa
     }
     ResearchArea.new rec
   end

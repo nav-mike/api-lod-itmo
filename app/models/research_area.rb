@@ -60,6 +60,7 @@ class ResearchArea < ActiveLod::Base
   end
   
   def self.to_research_area(solution)
+    hsa = solution[:has_research_area].present? ? solution[:has_research_area].value : ''
     rec = {
       id: solution[:id].value,
       name: solution[:name].value,
